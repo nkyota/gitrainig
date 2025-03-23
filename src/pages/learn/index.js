@@ -1,16 +1,9 @@
 import { useState, useEffect } from 'react';
 import styles from '../../styles/Learn.module.css';
 import { GitSimulatorProvider } from '../../lib/git-simulator/GitSimulator';
+import MainLayout from '../../components/layout/MainLayout';
 
-// 拡張版コンポーネントをインポート
-import GitLearningModule from '../../components/learning/enhanced/GitLearningModule';
-import LessonSelector from '../../components/learning/enhanced/LessonSelector';
-import SampleLessons from '../../components/learning/enhanced/SampleLessons';
-
-// デバッグログ
-console.log('learn/index.js: ページコンポーネントの初期化開始');
-
-// レッスンデータ
+// シンプル化したレッスンデータ
 const lessons = [
   {
     id: 'git-basics',
@@ -69,47 +62,6 @@ git add file.txt
 
 # 変更をコミット
 git commit -m "ファイルを追加"`
-      },
-      {
-        title: 'ブランチとは',
-        description: `
-          ブランチ（Branch）は、開発ラインを分岐させる機能です。メインの開発ラインから分岐して、独立した作業を行うことができます。
-          
-          ブランチの利点:
-          - 並行開発: 複数の機能やバグ修正を同時に進められる
-          - 安定性: メインブランチを安定した状態に保てる
-          - 実験: リスクの高い変更を安全に試せる
-          
-          デフォルトのブランチは「main」（または「master」）と呼ばれます。
-          新しい機能開発やバグ修正は、通常、専用のブランチで行います。
-        `,
-        codeExample: `# 新しいブランチを作成
-git branch feature-branch
-
-# ブランチを切り替える
-git checkout feature-branch
-
-# ブランチを作成して切り替える（上記2コマンドの組み合わせ）
-git checkout -b feature-branch`
-      },
-      {
-        title: 'マージとは',
-        description: `
-          マージ（Merge）は、あるブランチの変更を別のブランチに統合する操作です。
-          
-          例えば、feature-branchで新機能の開発が完了したら、その変更をmainブランチにマージします。
-          
-          マージの種類:
-          - Fast-forward: 単純に履歴を前に進める
-          - 3-way merge: 共通の祖先と2つのブランチの状態を比較して統合
-          
-          マージ中に競合（Conflict）が発生することがあります。これは、同じファイルの同じ部分が両方のブランチで異なる方法で変更された場合に起こります。競合は手動で解決する必要があります。
-        `,
-        codeExample: `# mainブランチに切り替え
-git checkout main
-
-# feature-branchの変更をmainにマージ
-git merge feature-branch`
       }
     ]
   },
@@ -132,188 +84,99 @@ git merge feature-branch`
         `,
         image: '/images/git-workflow.png',
         imageAlt: 'Gitブランチワークフロー'
-      },
-      {
-        title: 'ブランチの作成と切り替え',
-        description: `
-          新しいブランチを作成するには\`git branch\`コマンドを使用します。
-          ブランチを切り替えるには\`git checkout\`コマンドを使用します。
-          
-          \`git checkout -b\`コマンドを使用すると、ブランチの作成と切り替えを一度に行うことができます。
-          
-          現在のブランチを確認するには\`git branch\`コマンドを使用します。現在のブランチには「*」が表示されます。
-        `,
-        codeExample: `# 新しいブランチを作成
-git branch feature-login
-
-# ブランチを切り替える
-git checkout feature-login
-
-# ブランチを作成して切り替える（上記2コマンドの組み合わせ）
-git checkout -b feature-login
-
-# ブランチ一覧を表示
-git branch`
-      },
-      {
-        title: 'ブランチのマージ',
-        description: `
-          ブランチの変更を別のブランチにマージするには\`git merge\`コマンドを使用します。
-          
-          マージの手順:
-          1. マージ先のブランチに切り替える（例: main）
-          2. マージ元のブランチをマージする（例: feature-login）
-          
-          マージが成功すると、マージ先のブランチにマージ元の変更が反映されます。
-          
-          マージ後、不要になったブランチは\`git branch -d\`コマンドで削除できます。
-        `,
-        codeExample: `# mainブランチに切り替え
-git checkout main
-
-# feature-loginブランチをmainにマージ
-git merge feature-login
-
-# マージ済みのブランチを削除
-git branch -d feature-login`
-      },
-      {
-        title: 'マージ競合の解決',
-        description: `
-          マージ中に競合（Conflict）が発生することがあります。これは、同じファイルの同じ部分が両方のブランチで異なる方法で変更された場合に起こります。
-          
-          競合が発生すると、Gitは競合箇所をファイル内にマークします:
-          
-          \`\`\`
-          <<<<<<< HEAD
-          現在のブランチの内容
-          =======
-          マージするブランチの内容
-          >>>>>>> feature-branch
-          \`\`\`
-          
-          競合を解決するには:
-          1. 競合箇所を編集して最終的な内容に修正
-          2. マーカー（<<<<<<, =======, >>>>>>>）を削除
-          3. 変更をステージングエリアに追加
-          4. マージを完了するためにコミット
-        `,
-        codeExample: `# 競合を解決した後
-git add conflicted-file.txt
-git commit -m "Resolve merge conflict"`
       }
     ]
   }
 ];
 
-console.log('learn/index.js: レッスンデータの定義完了');
-
-// SampleLessonsからサンプルレッスンを取得
-// エラー回避のためにtry-catchで囲み、エラー時は空配列を使用
-let additionalLessons = [];
-try {
-  console.log('learn/index.js: SampleLessons.getLessons()の呼び出し前');
-  console.log('SampleLessons:', SampleLessons);
-  console.log('SampleLessons.getLessons:', SampleLessons.getLessons);
-  
-  if (typeof SampleLessons.getLessons === 'function') {
-    console.log('learn/index.js: SampleLessons.getLessons()は関数です');
-    additionalLessons = SampleLessons.getLessons();
-    console.log('learn/index.js: 追加レッスン取得完了', additionalLessons);
-  } else {
-    console.log('learn/index.js: SampleLessons.getLessons()は関数ではありません');
-  }
-} catch (error) {
-  console.error('Error loading additional lessons:', error);
+// シンプル化したレッスンセレクターコンポーネント
+function SimpleLessonSelector({ lessons, onSelectLesson, selectedLessonId }) {
+  return (
+    <div className={styles.lessonSelector}>
+      <h2>レッスン一覧</h2>
+      <ul className={styles.lessonList}>
+        {lessons.map(lesson => (
+          <li 
+            key={lesson.id}
+            className={`${styles.lessonItem} ${selectedLessonId === lesson.id ? styles.selected : ''}`}
+            onClick={() => onSelectLesson(lesson)}
+          >
+            <h3>{lesson.title}</h3>
+            <p>{lesson.description}</p>
+          </li>
+        ))}
+      </ul>
+    </div>
+  );
 }
 
-const allLessons = [...lessons, ...additionalLessons];
-console.log('learn/index.js: 全レッスン結合完了', allLessons.length);
-
-export default function LearnPage() {
-  console.log('learn/index.js: LearnPageコンポーネントのレンダリング開始');
+// シンプル化したレッスンコンテンツコンポーネント
+function SimpleLessonContent({ lesson }) {
+  if (!lesson) return null;
   
-  const [selectedLesson, setSelectedLesson] = useState(null);
-  const [completedLessons, setCompletedLessons] = useState([]);
-  const [userPoints, setUserPoints] = useState(0);
-
-  // ローカルストレージから完了したレッスンとポイントを読み込む
-  useEffect(() => {
-    console.log('learn/index.js: useEffect実行 - ローカルストレージからのデータ読み込み');
-    try {
-      const savedLessons = localStorage.getItem('git-basics-completed-lessons');
-      if (savedLessons) {
-        setCompletedLessons(JSON.parse(savedLessons));
-        console.log('learn/index.js: 完了レッスンの読み込み成功');
-      }
+  return (
+    <div className={styles.lessonContent}>
+      <h2>{lesson.title}</h2>
+      <p>{lesson.description}</p>
       
-      const savedPoints = localStorage.getItem('git-basics-user-points');
-      if (savedPoints) {
-        setUserPoints(parseInt(savedPoints, 10));
-        console.log('learn/index.js: ユーザーポイントの読み込み成功');
-      }
-    } catch (error) {
-      console.error('Failed to load user data:', error);
+      {lesson.steps.map((step, index) => (
+        <div key={index} className={styles.lessonStep}>
+          <h3>{step.title}</h3>
+          <div className={styles.stepDescription}>
+            {step.description.split('\n').map((line, i) => (
+              <p key={i}>{line}</p>
+            ))}
+          </div>
+          
+          {step.codeExample && (
+            <div className={styles.codeExample}>
+              <pre>{step.codeExample}</pre>
+            </div>
+          )}
+          
+          {step.image && (
+            <div className={styles.imageContainer}>
+              <img src={step.image} alt={step.imageAlt || 'レッスン画像'} />
+            </div>
+          )}
+        </div>
+      ))}
+    </div>
+  );
+}
+
+// シンプル化したLearnページコンポーネント
+export default function LearnPage() {
+  const [selectedLesson, setSelectedLesson] = useState(null);
+  
+  // 初期レッスン選択
+  useEffect(() => {
+    if (lessons.length > 0) {
+      setSelectedLesson(lessons[0]);
     }
   }, []);
-
-  // レッスン完了時の処理
-  const handleLessonComplete = (lessonId) => {
-    console.log('learn/index.js: レッスン完了処理', lessonId);
-    if (!completedLessons.includes(lessonId)) {
-      const newCompleted = [...completedLessons, lessonId];
-      setCompletedLessons(newCompleted);
-      
-      // ポイント加算（レッスン完了で10ポイント）
-      const newPoints = userPoints + 10;
-      setUserPoints(newPoints);
-      
-      try {
-        localStorage.setItem('git-basics-completed-lessons', JSON.stringify(newCompleted));
-        localStorage.setItem('git-basics-user-points', newPoints.toString());
-        console.log('learn/index.js: ユーザーデータの保存成功');
-      } catch (error) {
-        console.error('Failed to save user data:', error);
-      }
-    }
-  };
-
-  console.log('learn/index.js: LearnPageコンポーネントのレンダリング - GitSimulatorProviderの使用前');
-
+  
   return (
     <GitSimulatorProvider>
-      {console.log('learn/index.js: GitSimulatorProvider内部')}
       <div className={styles.container}>
         <h1 className={styles.title}>Git学習コース</h1>
         
         <div className={styles.content}>
           <div className={styles.sidebar}>
-            {console.log('learn/index.js: LessonSelectorのレンダリング前')}
-            {/* 拡張版のLessonSelectorコンポーネントを使用 */}
-            <LessonSelector 
-              lessons={allLessons}
-              completedLessons={completedLessons}
+            <SimpleLessonSelector 
+              lessons={lessons}
               selectedLessonId={selectedLesson?.id}
               onSelectLesson={setSelectedLesson}
-              userPoints={userPoints}
             />
           </div>
           
-          <div className={styles.lessonContent}>
+          <div className={styles.mainContent}>
             {selectedLesson ? (
-              // 拡張版のGitLearningModuleコンポーネントを使用
-              <GitLearningModule 
-                lesson={selectedLesson}
-                onComplete={handleLessonComplete}
-                userPoints={userPoints}
-                setUserPoints={setUserPoints}
-              />
+              <SimpleLessonContent lesson={selectedLesson} />
             ) : (
               <div className={styles.welcomeMessage}>
                 <h2>Gitの学習を始めましょう</h2>
                 <p>左側のメニューからレッスンを選択してください。</p>
-                <p>初めての方は「Gitの基本」から始めることをお勧めします。</p>
-                <p>レッスンを完了するとポイントが獲得でき、実績を解除できます。</p>
               </div>
             )}
           </div>
