@@ -153,6 +153,16 @@ function handleGitCommand(args, result) {
       return gitLog(result);
     case 'help':
       return gitHelp(result);
+    case 'merge':
+      return gitMerge(args.slice(1), result);
+    case 'add':
+      return gitAdd(args.slice(1), result);
+    case 'remote':
+      return gitRemote(args.slice(1), result);
+    case 'pull':
+      return gitPull(args.slice(1), result);
+    case 'push':
+      return gitPush(args.slice(1), result);
     default:
       result.message = `git: '${subCommand}' is not a git command. See 'git help'.`;
       return result;
@@ -439,6 +449,179 @@ grow, mark and tweak your common history
 
 'git help -a' and 'git help -g' list available subcommands and some
 concept guides. See 'git help <command>' for more information on a specific command.`;
+  return result;
+}
+
+// git merge コマンド（新規追加）
+function gitMerge(args, result) {
+  const repo = result.repository;
+  
+  // リポジトリが初期化されていない場合
+  if (repo.commits.length === 0) {
+    result.message = 'fatal: not a git repository (or any of the parent directories): .git';
+    return result;
+  }
+  
+  // 引数がない場合
+  if (args.length === 0) {
+    result.message = 'error: you must specify a branch name to merge';
+    return result;
+  }
+  
+  const sourceBranchName = args[0];
+  const sourceBranch = repo.branches.find(branch => branch.name === sourceBranchName);
+  
+  // 指定されたブランチが存在しない場合
+  if (!sourceBranch) {
+    result.message = `error: branch '${sourceBranchName}' not found.`;
+    return result;
+  }
+  
+  // 現在のブランチを特定
+  const currentBranch = repo.branches.find(branch => branch.commitId === repo.head);
+  
+  // HEADがデタッチされている場合
+  if (!currentBranch) {
+    result.message = 'error: cannot merge into detached HEAD';
+    return result;
+  }
+  
+  // 同じブランチをマージしようとした場合
+  if (currentBranch.name === sourceBranchName) {
+    result.message = `Already up to date. '${sourceBranchName}' is already merged.`;
+    return result;
+  }
+  
+  // マージコミットの作成
+  const sourceCommit = repo.commits.find(commit => commit.id === sourceBranch.commitId);
+  const currentCommit = repo.commits.find(commit => commit.id === currentBranch.commitId);
+  
+  const mergeCommit = {
+    id: generateCommitId(),
+    message: `Merge branch '${sourceBranchName}' into ${currentBranch.name}`,
+    timestamp: new Date().toISOString(),
+    parent: currentCommit.id,
+    secondParent: sourceCommit.id
+  };
+  
+  // リポジトリの更新
+  repo.commits.push(mergeCommit);
+  repo.head = mergeCommit.id;
+  currentBranch.commitId = mergeCommit.id;
+  
+  result.success = true;
+  result.message = `Merge made by the 'recursive' strategy.\n${sourceBranchName} -> ${currentBranch.name}`;
+  result.repository = repo;
+  
+  return result;
+}
+
+// git add コマンド（新規追加）
+function gitAdd(args, result) {
+  const repo = result.repository;
+  
+  // リポジトリが初期化されていない場合
+  if (repo.commits.length === 0) {
+    result.message = 'fatal: not a git repository (or any of the parent directories): .git';
+    return result;
+  }
+  
+  // 引数がない場合
+  if (args.length === 0) {
+    result.message = 'Nothing specified, nothing added.';
+    return result;
+  }
+  
+  const path = args[0];
+  
+  // 全ファイルの追加（.）
+  if (path === '.') {
+    result.success = true;
+    result.message = 'Added all changes to staging area.';
+    return result;
+  }
+  
+  result.success = true;
+  result.message = `Added '${path}' to staging area.`;
+  return result;
+}
+
+// git remote コマンド（新規追加）
+function gitRemote(args, result) {
+  const repo = result.repository;
+  
+  // リポジトリが初期化されていない場合
+  if (repo.commits.length === 0) {
+    result.message = 'fatal: not a git repository (or any of the parent directories): .git';
+    return result;
+  }
+  
+  // 引数がない場合は登録済みリモートを表示
+  if (args.length === 0) {
+    result.success = true;
+    result.message = 'No remotes configured.';
+    return result;
+  }
+  
+  // リモートの追加
+  if (args[0] === 'add' && args.length >= 3) {
+    const remoteName = args[1];
+    const remoteUrl = args[2];
+    
+    result.success = true;
+    result.message = `Added remote '${remoteName}' (${remoteUrl})`;
+    return result;
+  }
+  
+  result.message = 'usage: git remote add <name> <url>';
+  return result;
+}
+
+// git pull コマンド（新規追加）
+function gitPull(args, result) {
+  const repo = result.repository;
+  
+  // リポジトリが初期化されていない場合
+  if (repo.commits.length === 0) {
+    result.message = 'fatal: not a git repository (or any of the parent directories): .git';
+    return result;
+  }
+  
+  // 引数が足りない場合
+  if (args.length < 2) {
+    result.message = 'usage: git pull <remote> <branch>';
+    return result;
+  }
+  
+  const remoteName = args[0];
+  const branchName = args[1];
+  
+  result.success = true;
+  result.message = `Pulled changes from ${remoteName}/${branchName}.\nAlready up to date.`;
+  return result;
+}
+
+// git push コマンド（新規追加）
+function gitPush(args, result) {
+  const repo = result.repository;
+  
+  // リポジトリが初期化されていない場合
+  if (repo.commits.length === 0) {
+    result.message = 'fatal: not a git repository (or any of the parent directories): .git';
+    return result;
+  }
+  
+  // 引数が足りない場合
+  if (args.length < 2) {
+    result.message = 'usage: git push <remote> <branch>';
+    return result;
+  }
+  
+  const remoteName = args[0];
+  const branchName = args[1];
+  
+  result.success = true;
+  result.message = `Pushed changes to ${remoteName}/${branchName}.\nEverything up-to-date.`;
   return result;
 }
 
