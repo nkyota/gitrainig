@@ -204,7 +204,16 @@ git commit -m "Resolve merge conflict"`
 ];
 
 // SampleLessonsからサンプルレッスンを取得
-const additionalLessons = SampleLessons.getLessons();
+// エラー回避のためにtry-catchで囲み、エラー時は空配列を使用
+let additionalLessons = [];
+try {
+  if (typeof SampleLessons.getLessons === 'function') {
+    additionalLessons = SampleLessons.getLessons();
+  }
+} catch (error) {
+  console.error('Error loading additional lessons:', error);
+}
+
 const allLessons = [...lessons, ...additionalLessons];
 
 export default function LearnPage() {
