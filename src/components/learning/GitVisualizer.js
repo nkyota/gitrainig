@@ -1,5 +1,5 @@
 import { useState } from 'react';
-import styles from '../styles/GitVisualizer.module.css';
+import styles from '../../styles/GitVisualizer.module.css';
 
 export default function GitVisualizer({ repository }) {
   // リポジトリの状態を視覚化するコンポーネント

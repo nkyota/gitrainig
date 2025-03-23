@@ -1,5 +1,5 @@
 import { useState, useEffect, useRef } from 'react';
-import styles from '../styles/CommandTerminal.module.css';
+import styles from '../../styles/CommandTerminal.module.css';
 
 export default function CommandTerminal({ onCommandExecute, commandHistory = [] }) {
   const [input, setInput] = useState('');

@@ -1,8 +1,8 @@
 import { useState } from 'react';
-import styles from '../styles/GitSimulator.module.css';
-import CommandTerminal from '../components/learning/CommandTerminal';
-import GitVisualizer from '../components/learning/GitVisualizer';
-import { useGitSimulator } from '../lib/git-simulator/GitSimulator';
+import styles from '../../styles/GitSimulator.module.css';
+import CommandTerminal from '../../components/learning/CommandTerminal';
+import GitVisualizer from '../../components/learning/GitVisualizer';
+import { useGitSimulator } from '../../lib/git-simulator/GitSimulator';
 
 export default function SimulatorPage() {
   const { repository, commandHistory, executeCommand, resetRepository } = useGitSimulator();

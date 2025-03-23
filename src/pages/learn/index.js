@@ -1,7 +1,7 @@
 import { useState, useEffect } from 'react';
-import styles from '../styles/Learn.module.css';
-import LessonContent from '../components/learning/LessonContent';
-import { GitSimulatorProvider } from '../lib/git-simulator/GitSimulator';
+import styles from '../../styles/Learn.module.css';
+import LessonContent from '../../components/learning/LessonContent';
+import { GitSimulatorProvider } from '../../lib/git-simulator/GitSimulator';
 
 // レッスンデータ
 const lessons = [

@@ -1,5 +1,5 @@
 import { useState } from 'react';
-import styles from '../styles/LessonContent.module.css';
+import styles from '../../styles/LessonContent.module.css';
 
 export default function LessonContent({ lesson, onComplete }) {
   const [currentStep, setCurrentStep] = useState(0);
