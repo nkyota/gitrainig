@@ -7,6 +7,9 @@ import GitLearningModule from '../../components/learning/enhanced/GitLearningMod
 import LessonSelector from '../../components/learning/enhanced/LessonSelector';
 import SampleLessons from '../../components/learning/enhanced/SampleLessons';
 
+// デバッグログ
+console.log('learn/index.js: ページコンポーネントの初期化開始');
+
 // レッスンデータ
 const lessons = [
   {
@@ -203,35 +206,51 @@ git commit -m "Resolve merge conflict"`
   }
 ];
 
+console.log('learn/index.js: レッスンデータの定義完了');
+
 // SampleLessonsからサンプルレッスンを取得
 // エラー回避のためにtry-catchで囲み、エラー時は空配列を使用
 let additionalLessons = [];
 try {
+  console.log('learn/index.js: SampleLessons.getLessons()の呼び出し前');
+  console.log('SampleLessons:', SampleLessons);
+  console.log('SampleLessons.getLessons:', SampleLessons.getLessons);
+  
   if (typeof SampleLessons.getLessons === 'function') {
+    console.log('learn/index.js: SampleLessons.getLessons()は関数です');
     additionalLessons = SampleLessons.getLessons();
+    console.log('learn/index.js: 追加レッスン取得完了', additionalLessons);
+  } else {
+    console.log('learn/index.js: SampleLessons.getLessons()は関数ではありません');
   }
 } catch (error) {
   console.error('Error loading additional lessons:', error);
 }
 
 const allLessons = [...lessons, ...additionalLessons];
+console.log('learn/index.js: 全レッスン結合完了', allLessons.length);
 
 export default function LearnPage() {
+  console.log('learn/index.js: LearnPageコンポーネントのレンダリング開始');
+  
   const [selectedLesson, setSelectedLesson] = useState(null);
   const [completedLessons, setCompletedLessons] = useState([]);
   const [userPoints, setUserPoints] = useState(0);
 
   // ローカルストレージから完了したレッスンとポイントを読み込む
   useEffect(() => {
+    console.log('learn/index.js: useEffect実行 - ローカルストレージからのデータ読み込み');
     try {
       const savedLessons = localStorage.getItem('git-basics-completed-lessons');
       if (savedLessons) {
         setCompletedLessons(JSON.parse(savedLessons));
+        console.log('learn/index.js: 完了レッスンの読み込み成功');
       }
       
       const savedPoints = localStorage.getItem('git-basics-user-points');
       if (savedPoints) {
         setUserPoints(parseInt(savedPoints, 10));
+        console.log('learn/index.js: ユーザーポイントの読み込み成功');
       }
     } catch (error) {
       console.error('Failed to load user data:', error);
@@ -240,6 +259,7 @@ export default function LearnPage() {
 
   // レッスン完了時の処理
   const handleLessonComplete = (lessonId) => {
+    console.log('learn/index.js: レッスン完了処理', lessonId);
     if (!completedLessons.includes(lessonId)) {
       const newCompleted = [...completedLessons, lessonId];
       setCompletedLessons(newCompleted);
@@ -251,19 +271,24 @@ export default function LearnPage() {
       try {
         localStorage.setItem('git-basics-completed-lessons', JSON.stringify(newCompleted));
         localStorage.setItem('git-basics-user-points', newPoints.toString());
+        console.log('learn/index.js: ユーザーデータの保存成功');
       } catch (error) {
         console.error('Failed to save user data:', error);
       }
     }
   };
 
+  console.log('learn/index.js: LearnPageコンポーネントのレンダリング - GitSimulatorProviderの使用前');
+
   return (
     <GitSimulatorProvider>
+      {console.log('learn/index.js: GitSimulatorProvider内部')}
       <div className={styles.container}>
         <h1 className={styles.title}>Git学習コース</h1>
         
         <div className={styles.content}>
           <div className={styles.sidebar}>
+            {console.log('learn/index.js: LessonSelectorのレンダリング前')}
             {/* 拡張版のLessonSelectorコンポーネントを使用 */}
             <LessonSelector 
               lessons={allLessons}
