@@ -1,5 +1,5 @@
 import { useState, useEffect } from 'react';
-import styles from '../../styles/AchievementSystem.module.css';
+import styles from '../../../styles/AchievementSystem.module.css';
 
 export default function AchievementSystem({ userProgress, achievements }) {
   const [showAchievementPopup, setShowAchievementPopup] = useState(false);

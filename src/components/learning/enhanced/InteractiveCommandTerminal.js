@@ -1,5 +1,5 @@
 import { useState, useEffect, useRef } from 'react';
-import styles from '../../styles/InteractiveCommandTerminal.module.css';
+import styles from '../../../styles/InteractiveCommandTerminal.module.css';
 
 export default function InteractiveCommandTerminal({ 
   onCommandExecute, 

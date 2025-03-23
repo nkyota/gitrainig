@@ -1,5 +1,5 @@
 import { useState, useEffect } from 'react';
-import styles from '../../styles/EnhancedGitVisualizer.module.css';
+import styles from '../../../styles/EnhancedGitVisualizer.module.css';
 
 export default function EnhancedGitVisualizer({ repository, onCommandExecute }) {
   const [zoomLevel, setZoomLevel] = useState(1);

@@ -1,5 +1,5 @@
 import { useState, useEffect } from 'react';
-import styles from '../../styles/SampleLessons.module.css';
+import styles from '../../../styles/SampleLessons.module.css';
 
 // サンプルレッスンデータ
 const sampleLessons = [

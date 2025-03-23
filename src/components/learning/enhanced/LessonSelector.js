@@ -1,5 +1,5 @@
 import { useState, useEffect } from 'react';
-import styles from '../../styles/LessonSelector.module.css';
+import styles from '../../../styles/LessonSelector.module.css';
 
 export default function LessonSelector({ lessons, onSelectLesson, userProgress }) {
   const [selectedCategory, setSelectedCategory] = useState('all');

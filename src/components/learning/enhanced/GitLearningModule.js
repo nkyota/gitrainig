@@ -1,5 +1,5 @@
 import { useState, useEffect } from 'react';
-import styles from '../../styles/GitLearningModule.module.css';
+import styles from '../../../styles/GitLearningModule.module.css';
 import EnhancedGitVisualizer from './EnhancedGitVisualizer';
 import InteractiveCommandTerminal from './InteractiveCommandTerminal';
 
