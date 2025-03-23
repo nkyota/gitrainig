@@ -1,0 +1,122 @@
+.container {
+  width: 100%;
+  margin-bottom: 2rem;
+  border: 1px solid #eaeaea;
+  border-radius: 8px;
+  background-color: #ffffff;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05);
+}
+
+.toolbar {
+  display: flex;
+  padding: 0.5rem;
+  border-bottom: 1px solid #eaeaea;
+  background-color: #f8f9fa;
+  border-top-left-radius: 8px;
+  border-top-right-radius: 8px;
+}
+
+.toolbarButton {
+  background-color: #ffffff;
+  border: 1px solid #ddd;
+  border-radius: 4px;
+  padding: 0.25rem 0.5rem;
+  margin-right: 0.5rem;
+  font-size: 0.875rem;
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+.toolbarButton:hover {
+  background-color: #f0f0f0;
+  border-color: #ccc;
+}
+
+.visualizer {
+  position: relative;
+  min-height: 300px;
+  padding: 1rem;
+  overflow: auto;
+  transform-origin: top left;
+  transition: transform 0.3s ease;
+}
+
+.commitGraph {
+  position: relative;
+  padding-left: 20px;
+}
+
+.commit {
+  position: absolute;
+  left: 0;
+  display: flex;
+  align-items: center;
+}
+
+.commitNode {
+  width: 16px;
+  height: 16px;
+  border-radius: 50%;
+  background-color: #0070f3;
+  margin-right: 10px;
+  z-index: 2;
+}
+
+.commitInfo {
+  display: flex;
+  flex-direction: column;
+  margin-left: 10px;
+}
+
+.commitId {
+  font-family: monospace;
+  font-size: 0.875rem;
+  color: #666;
+}
+
+.commitMessage {
+  font-size: 0.9rem;
+  color: #333;
+}
+
+.commitLine {
+  position: absolute;
+  left: 8px;
+  width: 2px;
+  background-color: #0070f3;
+  z-index: 1;
+}
+
+.branchLabels {
+  display: flex;
+  flex-wrap: wrap;
+  margin-left: 10px;
+}
+
+.branchLabel {
+  background-color: #e1f5fe;
+  color: #0288d1;
+  font-size: 0.75rem;
+  padding: 2px 6px;
+  border-radius: 12px;
+  margin-right: 5px;
+  margin-bottom: 5px;
+}
+
+.head {
+  font-weight: bold;
+}
+
+.head .commitNode {
+  background-color: #f50057;
+  box-shadow: 0 0 0 4px rgba(245, 0, 87, 0.2);
+}
+
+.emptyState {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 200px;
+  color: #666;
+  font-style: italic;
+}
