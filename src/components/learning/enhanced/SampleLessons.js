@@ -286,6 +286,16 @@ const initialUserProgress = {
   }
 };
 
+// サンプルレッスンを取得する静的メソッドを追加
+function getLessons() {
+  return sampleLessons;
+}
+
+// サンプル実績を取得する静的メソッド
+function getAchievements() {
+  return sampleAchievements;
+}
+
 export default function SampleLessons() {
   const [selectedLesson, setSelectedLesson] = useState(null);
   const [userProgress, setUserProgress] = useState(initialUserProgress);
@@ -315,32 +325,25 @@ export default function SampleLessons() {
     setSelectedLesson(null);
   };
   
-  // サンプルデータをインポート
-  const LessonSelector = (props) => {
-    const { lessons, onSelectLesson, userProgress } = props;
-    
-    // LessonSelectorコンポーネントの実装をここに記述
-    // 実際のプロジェクトでは、このコンポーネントは別ファイルからインポートします
-    
-    return (
-      <div className={styles.sampleLessonSelector}>
-        <h2>レッスン一覧（サンプル）</h2>
+  return (
+    <div className={styles.container}>
+      <h1 className={styles.title}>Git学習サンプル</h1>
+      
+      <div className={styles.content}>
+        {/* レッスン一覧 */}
         <div className={styles.lessonList}>
-          {lessons.map(lesson => (
+          {sampleLessons.map(lesson => (
             <div 
               key={lesson.id} 
               className={styles.lessonCard}
-              onClick={() => onSelectLesson(lesson)}
+              onClick={() => handleSelectLesson(lesson)}
             >
               <h3>{lesson.title}</h3>
-              <div className={styles.lessonMeta}>
-                <span className={styles[`difficulty-${lesson.difficulty}`]}>
-                  {lesson.difficulty === 'beginner' ? '初級' : 
-                   lesson.difficulty === 'intermediate' ? '中級' : '上級'}
-                </span>
-                <span>{lesson.duration}</span>
-              </div>
               <p>{lesson.description}</p>
+              <div className={styles.lessonMeta}>
+                <span className={styles.category}>{lesson.category}</span>
+                <span className={styles.duration}>{lesson.duration}</span>
+              </div>
               <div className={styles.progressBar}>
                 <div 
                   className={styles.progressFill}
@@ -350,132 +353,19 @@ export default function SampleLessons() {
             </div>
           ))}
         </div>
-      </div>
-    );
-  };
-  
-  const GitLearningModule = (props) => {
-    const { lesson, onComplete } = props;
-    
-    // GitLearningModuleコンポーネントの実装をここに記述
-    // 実際のプロジェクトでは、このコンポーネントは別ファイルからインポートします
-    
-    return (
-      <div className={styles.sampleLearningModule}>
-        <h2>{lesson.title}</h2>
-        <p>{lesson.description}</p>
-        <div className={styles.stepsList}>
-          <h3>レッスンステップ：</h3>
-          <ol>
-            {lesson.steps.map((step, index) => (
-              <li key={index}>
-                <strong>{step.title}</strong>: {step.description}
-              </li>
-            ))}
-          </ol>
-        </div>
-        <div className={styles.sampleNote}>
-          <p>
-            <strong>注意:</strong> これはサンプル表示です。実際の実装では、
-            EnhancedGitVisualizer、InteractiveCommandTerminal、
-            GitLearningModuleコンポーネントが統合されて、
-            インタラクティブなGit学習体験を提供します。
-          </p>
-        </div>
+        
+        {/* 実績ボタン */}
         <button 
-          className={styles.completeButton}
-          onClick={() => onComplete(lesson.id, 25)}
+          className={styles.achievementsButton}
+          onClick={toggleAchievements}
         >
-          レッスンを完了としてマーク（デモ用）
+          {showAchievements ? 'レッスンに戻る' : '実績を表示'}
         </button>
-      </div>
-    );
-  };
-  
-  const AchievementSystem = (props) => {
-    const { userProgress, achievements } = props;
-    
-    // AchievementSystemコンポーネントの実装をここに記述
-    // 実際のプロジェクトでは、このコンポーネントは別ファイルからインポートします
-    
-    return (
-      <div className={styles.sampleAchievements}>
-        <h2>実績一覧（サンプル）</h2>
-        <div className={styles.achievementList}>
-          {achievements.map(achievement => {
-            const isEarned = achievement.id === 'git-apprentice' && 
-              Object.values(userProgress).some(p => p.completionPercentage === 100);
-            
-            return (
-              <div 
-                key={achievement.id} 
-                className={`${styles.achievementCard} ${isEarned ? styles.earned : ''}`}
-              >
-                <div className={styles.achievementIcon}>{achievement.icon}</div>
-                <div className={styles.achievementInfo}>
-                  <h3>{achievement.hidden && !isEarned ? '???' : achievement.title}</h3>
-                  <p>{achievement.hidden && !isEarned ? 
-                    'この実績は秘密です。プレイを続けて解除しましょう。' : 
-                    achievement.description}</p>
-                </div>
-              </div>
-            );
-          })}
-        </div>
-      </div>
-    );
-  };
-
-  return (
-    <div className={styles.container}>
-      <div className={styles.header}>
-        <h1>Git Basics - 強化版サンプル</h1>
-        <div className={styles.navigation}>
-          <button 
-            className={`${styles.navButton} ${!showAchievements && !selectedLesson ? styles.active : ''}`}
-            onClick={() => {
-              setSelectedLesson(null);
-              setShowAchievements(false);
-            }}
-          >
-            レッスン一覧
-          </button>
-          <button 
-            className={`${styles.navButton} ${showAchievements ? styles.active : ''}`}
-            onClick={toggleAchievements}
-          >
-            実績
-          </button>
-        </div>
-      </div>
-      
-      <div className={styles.content}>
-        {showAchievements ? (
-          <AchievementSystem 
-            userProgress={userProgress}
-            achievements={sampleAchievements}
-          />
-        ) : selectedLesson ? (
-          <GitLearningModule 
-            lesson={selectedLesson}
-            onComplete={handleLessonComplete}
-          />
-        ) : (
-          <LessonSelector 
-            lessons={sampleLessons}
-            onSelectLesson={handleSelectLesson}
-            userProgress={userProgress}
-          />
-        )}
-      </div>
-      
-      <div className={styles.footer}>
-        <p>
-          このサンプルページは、Git Basicsトレーニングウェブサイトの強化版コンポーネントを
-          デモンストレーションするために作成されました。実際の実装では、より高度な
-          インタラクティブ機能とビジュアライゼーションが提供されます。
-        </p>
       </div>
     </div>
   );
 }
+
+// 静的メソッドをコンポーネントに追加
+SampleLessons.getLessons = getLessons;
+SampleLessons.getAchievements = getAchievements;
