@@ -1,0 +1,288 @@
+.container {
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 20px;
+}
+
+.header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 30px;
+  border-bottom: 1px solid #e1e4e8;
+  padding-bottom: 20px;
+}
+
+.header h1 {
+  font-size: 28px;
+  color: #24292e;
+  margin: 0;
+}
+
+.navigation {
+  display: flex;
+  gap: 10px;
+}
+
+.navButton {
+  padding: 8px 16px;
+  background-color: #f6f8fa;
+  border: 1px solid #e1e4e8;
+  border-radius: 6px;
+  font-size: 14px;
+  color: #24292e;
+  cursor: pointer;
+  transition: all 0.2s;
+}
+
+.navButton:hover {
+  background-color: #f3f4f6;
+  border-color: #d1d5da;
+}
+
+.navButton.active {
+  background-color: #0366d6;
+  color: white;
+  border-color: #0366d6;
+}
+
+.content {
+  margin-bottom: 30px;
+}
+
+.footer {
+  border-top: 1px solid #e1e4e8;
+  padding-top: 20px;
+  color: #586069;
+  font-size: 14px;
+}
+
+/* サンプルレッスンセレクター */
+.sampleLessonSelector {
+  margin-bottom: 30px;
+}
+
+.sampleLessonSelector h2 {
+  font-size: 24px;
+  color: #24292e;
+  margin-bottom: 20px;
+}
+
+.lessonList {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+  gap: 20px;
+}
+
+.lessonCard {
+  border: 1px solid #e1e4e8;
+  border-radius: 6px;
+  padding: 20px;
+  background-color: #fff;
+  cursor: pointer;
+  transition: all 0.2s;
+}
+
+.lessonCard:hover {
+  transform: translateY(-4px);
+  box-shadow: 0 8px 24px rgba(149, 157, 165, 0.2);
+  border-color: #d1d5da;
+}
+
+.lessonCard h3 {
+  font-size: 18px;
+  color: #24292e;
+  margin: 0 0 10px 0;
+}
+
+.lessonMeta {
+  display: flex;
+  gap: 10px;
+  margin-bottom: 10px;
+}
+
+.difficulty-beginner {
+  padding: 2px 8px;
+  background-color: #bef5cb;
+  color: #22863a;
+  border-radius: 12px;
+  font-size: 12px;
+}
+
+.difficulty-intermediate {
+  padding: 2px 8px;
+  background-color: #ffea7f;
+  color: #735c0f;
+  border-radius: 12px;
+  font-size: 12px;
+}
+
+.difficulty-advanced {
+  padding: 2px 8px;
+  background-color: #fdaeb7;
+  color: #cb2431;
+  border-radius: 12px;
+  font-size: 12px;
+}
+
+.lessonCard p {
+  font-size: 14px;
+  color: #586069;
+  margin-bottom: 15px;
+}
+
+.progressBar {
+  height: 6px;
+  background-color: #eaecef;
+  border-radius: 3px;
+  overflow: hidden;
+}
+
+.progressFill {
+  height: 100%;
+  background-color: #2ea44f;
+  border-radius: 3px;
+}
+
+/* サンプル学習モジュール */
+.sampleLearningModule {
+  background-color: #fff;
+  border: 1px solid #e1e4e8;
+  border-radius: 6px;
+  padding: 20px;
+}
+
+.sampleLearningModule h2 {
+  font-size: 24px;
+  color: #24292e;
+  margin: 0 0 15px 0;
+}
+
+.sampleLearningModule p {
+  font-size: 16px;
+  color: #24292e;
+  margin-bottom: 20px;
+}
+
+.stepsList {
+  margin-bottom: 30px;
+}
+
+.stepsList h3 {
+  font-size: 18px;
+  color: #24292e;
+  margin: 0 0 15px 0;
+}
+
+.stepsList ol {
+  padding-left: 20px;
+}
+
+.stepsList li {
+  font-size: 16px;
+  color: #24292e;
+  margin-bottom: 10px;
+}
+
+.sampleNote {
+  background-color: #fffbdd;
+  border: 1px solid #ffe58f;
+  border-radius: 6px;
+  padding: 15px;
+  margin-bottom: 20px;
+}
+
+.sampleNote p {
+  font-size: 14px;
+  color: #735c0f;
+  margin: 0;
+}
+
+.completeButton {
+  padding: 10px 20px;
+  background-color: #2ea44f;
+  color: white;
+  border: none;
+  border-radius: 6px;
+  font-size: 16px;
+  cursor: pointer;
+  transition: background-color 0.2s;
+}
+
+.completeButton:hover {
+  background-color: #2c974b;
+}
+
+/* サンプル実績システム */
+.sampleAchievements {
+  background-color: #fff;
+  border: 1px solid #e1e4e8;
+  border-radius: 6px;
+  padding: 20px;
+}
+
+.sampleAchievements h2 {
+  font-size: 24px;
+  color: #24292e;
+  margin: 0 0 20px 0;
+}
+
+.achievementList {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+  gap: 15px;
+}
+
+.achievementCard {
+  display: flex;
+  align-items: center;
+  padding: 15px;
+  border-radius: 6px;
+  background-color: #f6f8fa;
+  border: 1px solid #e1e4e8;
+}
+
+.achievementCard.earned {
+  border-color: #2ea44f;
+  background-color: #f0fff4;
+}
+
+.achievementIcon {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  width: 40px;
+  height: 40px;
+  border-radius: 50%;
+  background-color: #e1e4e8;
+  margin-right: 15px;
+  font-size: 20px;
+}
+
+.achievementInfo {
+  flex-grow: 1;
+}
+
+.achievementInfo h3 {
+  font-size: 16px;
+  color: #24292e;
+  margin: 0 0 5px 0;
+}
+
+.achievementInfo p {
+  font-size: 14px;
+  color: #586069;
+  margin: 0;
+}
+
+@media (max-width: 768px) {
+  .header {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 15px;
+  }
+  
+  .lessonList, .achievementList {
+    grid-template-columns: 1fr;
+  }
+}

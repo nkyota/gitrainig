@@ -1,7 +1,11 @@
 import { useState, useEffect } from 'react';
 import styles from '../../styles/Learn.module.css';
-import LessonContent from '../../components/learning/LessonContent';
 import { GitSimulatorProvider } from '../../lib/git-simulator/GitSimulator';
+
+// 拡張版コンポーネントをインポート
+import GitLearningModule from '../../components/learning/enhanced/GitLearningModule';
+import LessonSelector from '../../components/learning/enhanced/LessonSelector';
+import SampleLessons from '../../components/learning/enhanced/SampleLessons';
 
 // レッスンデータ
 const lessons = [
@@ -199,19 +203,29 @@ git commit -m "Resolve merge conflict"`
   }
 ];
 
+// SampleLessonsからサンプルレッスンを取得
+const additionalLessons = SampleLessons.getLessons();
+const allLessons = [...lessons, ...additionalLessons];
+
 export default function LearnPage() {
   const [selectedLesson, setSelectedLesson] = useState(null);
   const [completedLessons, setCompletedLessons] = useState([]);
+  const [userPoints, setUserPoints] = useState(0);
 
-  // ローカルストレージから完了したレッスンを読み込む
+  // ローカルストレージから完了したレッスンとポイントを読み込む
   useEffect(() => {
     try {
-      const saved = localStorage.getItem('git-basics-completed-lessons');
-      if (saved) {
-        setCompletedLessons(JSON.parse(saved));
+      const savedLessons = localStorage.getItem('git-basics-completed-lessons');
+      if (savedLessons) {
+        setCompletedLessons(JSON.parse(savedLessons));
+      }
+      
+      const savedPoints = localStorage.getItem('git-basics-user-points');
+      if (savedPoints) {
+        setUserPoints(parseInt(savedPoints, 10));
       }
     } catch (error) {
-      console.error('Failed to load completed lessons:', error);
+      console.error('Failed to load user data:', error);
     }
   }, []);
 
@@ -221,10 +235,15 @@ export default function LearnPage() {
       const newCompleted = [...completedLessons, lessonId];
       setCompletedLessons(newCompleted);
       
+      // ポイント加算（レッスン完了で10ポイント）
+      const newPoints = userPoints + 10;
+      setUserPoints(newPoints);
+      
       try {
         localStorage.setItem('git-basics-completed-lessons', JSON.stringify(newCompleted));
+        localStorage.setItem('git-basics-user-points', newPoints.toString());
       } catch (error) {
-        console.error('Failed to save completed lessons:', error);
+        console.error('Failed to save user data:', error);
       }
     }
   };
@@ -236,39 +255,31 @@ export default function LearnPage() {
         
         <div className={styles.content}>
           <div className={styles.sidebar}>
-            <h2 className={styles.sidebarTitle}>レッスン一覧</h2>
-            <ul className={styles.lessonList}>
-              {lessons.map(lesson => (
-                <li 
-                  key={lesson.id}
-                  className={`${styles.lessonItem} ${selectedLesson?.id === lesson.id ? styles.active : ''}`}
-                  onClick={() => setSelectedLesson(lesson)}
-                >
-                  <div className={styles.lessonTitle}>
-                    {lesson.title}
-                    {completedLessons.includes(lesson.id) && (
-                      <span className={styles.completedBadge}>✓</span>
-                    )}
-                  </div>
-                  <div className={styles.lessonDescription}>
-                    {lesson.description}
-                  </div>
-                </li>
-              ))}
-            </ul>
+            {/* 拡張版のLessonSelectorコンポーネントを使用 */}
+            <LessonSelector 
+              lessons={allLessons}
+              completedLessons={completedLessons}
+              selectedLessonId={selectedLesson?.id}
+              onSelectLesson={setSelectedLesson}
+              userPoints={userPoints}
+            />
           </div>
           
           <div className={styles.lessonContent}>
             {selectedLesson ? (
-              <LessonContent 
+              // 拡張版のGitLearningModuleコンポーネントを使用
+              <GitLearningModule 
                 lesson={selectedLesson}
                 onComplete={handleLessonComplete}
+                userPoints={userPoints}
+                setUserPoints={setUserPoints}
               />
             ) : (
               <div className={styles.welcomeMessage}>
                 <h2>Gitの学習を始めましょう</h2>
                 <p>左側のメニューからレッスンを選択してください。</p>
                 <p>初めての方は「Gitの基本」から始めることをお勧めします。</p>
+                <p>レッスンを完了するとポイントが獲得でき、実績を解除できます。</p>
               </div>
             )}
           </div>

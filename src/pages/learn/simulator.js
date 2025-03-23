@@ -1,15 +1,51 @@
 import { useState } from 'react';
 import styles from '../../styles/GitSimulator.module.css';
-import CommandTerminal from '../../components/learning/CommandTerminal';
-import GitVisualizer from '../../components/learning/GitVisualizer';
 import { useGitSimulator } from '../../lib/git-simulator/GitSimulator';
+
+// 拡張版コンポーネントをインポート
+import InteractiveCommandTerminal from '../../components/learning/enhanced/InteractiveCommandTerminal';
+import EnhancedGitVisualizer from '../../components/learning/enhanced/EnhancedGitVisualizer';
+import AchievementSystem from '../../components/learning/enhanced/AchievementSystem';
 
 export default function SimulatorPage() {
   const { repository, commandHistory, executeCommand, resetRepository } = useGitSimulator();
   const [showInstructions, setShowInstructions] = useState(true);
+  const [achievements, setAchievements] = useState([]);
 
   const handleCommandExecute = (command) => {
-    return executeCommand(command);
+    const result = executeCommand(command);
+    
+    // コマンド実行に基づいて実績を更新
+    if (result.success) {
+      updateAchievements(command);
+    }
+    
+    return result;
+  };
+
+  const updateAchievements = (command) => {
+    // 実績の条件をチェックして更新
+    const newAchievements = [...achievements];
+    
+    // 初めてのコミット
+    if (command.startsWith('git commit') && !achievements.includes('first-commit')) {
+      newAchievements.push('first-commit');
+    }
+    
+    // 初めてのブランチ作成
+    if (command.startsWith('git branch') && !achievements.includes('first-branch')) {
+      newAchievements.push('first-branch');
+    }
+    
+    // 初めてのチェックアウト
+    if (command.startsWith('git checkout') && !achievements.includes('first-checkout')) {
+      newAchievements.push('first-checkout');
+    }
+    
+    // 実績が更新された場合のみ状態を更新
+    if (newAchievements.length > achievements.length) {
+      setAchievements(newAchievements);
+    }
   };
 
   const handleReset = () => {
@@ -48,11 +84,11 @@ export default function SimulatorPage() {
       
       <div className={styles.simulatorContainer}>
         <div className={styles.visualizerContainer}>
-          <GitVisualizer repository={repository} />
+          <EnhancedGitVisualizer repository={repository} />
         </div>
         
         <div className={styles.terminalContainer}>
-          <CommandTerminal 
+          <InteractiveCommandTerminal 
             onCommandExecute={handleCommandExecute}
             commandHistory={commandHistory}
           />
@@ -73,6 +109,9 @@ export default function SimulatorPage() {
           </div>
         </div>
       </div>
+      
+      {/* 実績システムを追加 */}
+      <AchievementSystem achievements={achievements} />
     </div>
   );
 }

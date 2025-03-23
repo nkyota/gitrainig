@@ -1,0 +1,438 @@
+.container {
+  display: flex;
+  flex-direction: column;
+  width: 100%;
+  border: 1px solid #e1e4e8;
+  border-radius: 6px;
+  background-color: #f6f8fa;
+  margin-bottom: 20px;
+  overflow: hidden;
+}
+
+.toolbar {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 10px 15px;
+  background-color: #f1f2f3;
+  border-bottom: 1px solid #e1e4e8;
+}
+
+.viewModes {
+  display: flex;
+  gap: 10px;
+}
+
+.viewModeButton {
+  padding: 6px 12px;
+  background-color: #fff;
+  border: 1px solid #d1d5da;
+  border-radius: 4px;
+  font-size: 14px;
+  cursor: pointer;
+  transition: all 0.2s;
+}
+
+.viewModeButton:hover {
+  background-color: #f3f4f6;
+}
+
+.viewModeButton.active {
+  background-color: #0366d6;
+  color: white;
+  border-color: #0366d6;
+}
+
+.zoomControls {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.toolbarButton {
+  padding: 6px 12px;
+  background-color: #fff;
+  border: 1px solid #d1d5da;
+  border-radius: 4px;
+  font-size: 14px;
+  cursor: pointer;
+  transition: all 0.2s;
+}
+
+.toolbarButton:hover {
+  background-color: #f3f4f6;
+}
+
+.zoomLevel {
+  font-size: 14px;
+  font-weight: 500;
+  min-width: 50px;
+  text-align: center;
+}
+
+.visualizerContainer {
+  display: flex;
+  height: 400px;
+  overflow: hidden;
+}
+
+.visualizer {
+  flex: 2;
+  position: relative;
+  overflow: auto;
+  padding: 20px;
+  transition: transform 0.3s ease;
+  transform-origin: top left;
+}
+
+.visualizer.tree {
+  /* ツリー表示のスタイル */
+}
+
+.visualizer.network {
+  /* ネットワーク表示のスタイル */
+}
+
+.visualizer.timeline {
+  /* タイムライン表示のスタイル */
+}
+
+.commitGraph {
+  position: relative;
+  min-height: 100%;
+  padding-left: 20px;
+}
+
+.commit {
+  position: absolute;
+  display: flex;
+  align-items: center;
+  left: 0;
+  cursor: pointer;
+  transition: all 0.2s;
+  padding: 5px;
+  border-radius: 4px;
+}
+
+.commit:hover {
+  background-color: rgba(3, 102, 214, 0.1);
+}
+
+.commit.head {
+  font-weight: bold;
+}
+
+.commit.selected {
+  background-color: rgba(3, 102, 214, 0.2);
+}
+
+.commitNode {
+  width: 16px;
+  height: 16px;
+  border-radius: 50%;
+  background-color: #0366d6;
+  margin-right: 10px;
+  flex-shrink: 0;
+}
+
+.commitInfo {
+  display: flex;
+  flex-direction: column;
+  margin-right: 10px;
+}
+
+.commitId {
+  font-family: monospace;
+  font-size: 12px;
+  color: #586069;
+}
+
+.commitMessage {
+  font-size: 14px;
+  font-weight: 500;
+}
+
+.commitDate {
+  font-size: 12px;
+  color: #586069;
+}
+
+.branchLabels {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 5px;
+  margin-left: 10px;
+}
+
+.branchLabel {
+  padding: 2px 8px;
+  background-color: #eff3f6;
+  border: 1px solid #d1d5da;
+  border-radius: 12px;
+  font-size: 12px;
+  white-space: nowrap;
+}
+
+.branchLabel.currentBranch {
+  background-color: #0366d6;
+  color: white;
+  border-color: #0366d6;
+}
+
+.commitLine {
+  position: absolute;
+  left: 8px;
+  width: 2px;
+  background-color: #0366d6;
+  z-index: -1;
+}
+
+.repoStateContainer {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  border-left: 1px solid #e1e4e8;
+  overflow: auto;
+}
+
+.repoStateSection {
+  padding: 15px;
+  border-bottom: 1px solid #e1e4e8;
+}
+
+.repoStateSection h3 {
+  margin-top: 0;
+  margin-bottom: 10px;
+  font-size: 16px;
+  color: #24292e;
+}
+
+.fileList {
+  display: flex;
+  flex-direction: column;
+  gap: 5px;
+}
+
+.file {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 5px 10px;
+  background-color: #fff;
+  border: 1px solid #e1e4e8;
+  border-radius: 4px;
+  font-size: 14px;
+}
+
+.fileName {
+  font-family: monospace;
+}
+
+.fileStatus {
+  padding: 2px 6px;
+  border-radius: 12px;
+  font-size: 12px;
+  font-weight: 500;
+}
+
+.modified {
+  background-color: #ffea7f;
+  color: #24292e;
+}
+
+.added {
+  background-color: #a2eeef;
+  color: #24292e;
+}
+
+.deleted {
+  background-color: #fdaeb7;
+  color: #24292e;
+}
+
+.staged {
+  background-color: #bef5cb;
+  color: #24292e;
+}
+
+.emptyMessage {
+  color: #586069;
+  font-style: italic;
+  padding: 10px 0;
+}
+
+.commitDetails {
+  border-top: 1px solid #e1e4e8;
+  background-color: #fff;
+  max-height: 300px;
+  overflow: auto;
+}
+
+.commitDetailsHeader {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 10px 15px;
+  background-color: #f1f2f3;
+  border-bottom: 1px solid #e1e4e8;
+}
+
+.commitDetailsHeader h3 {
+  margin: 0;
+  font-size: 16px;
+}
+
+.closeButton {
+  background: none;
+  border: none;
+  font-size: 18px;
+  cursor: pointer;
+  color: #586069;
+}
+
+.closeButton:hover {
+  color: #24292e;
+}
+
+.commitDetailsContent {
+  padding: 15px;
+}
+
+.commitMeta {
+  margin-bottom: 15px;
+}
+
+.commitMeta p {
+  margin: 5px 0;
+}
+
+.commitDiff h4 {
+  margin-top: 0;
+  margin-bottom: 10px;
+  font-size: 14px;
+}
+
+.fileDiff {
+  margin-bottom: 15px;
+}
+
+.fileDiffHeader {
+  padding: 5px 10px;
+  background-color: #f1f2f3;
+  border: 1px solid #e1e4e8;
+  border-bottom: none;
+  border-radius: 4px 4px 0 0;
+  font-family: monospace;
+  font-size: 14px;
+}
+
+.diffContent {
+  margin: 0;
+  padding: 10px;
+  background-color: #f6f8fa;
+  border: 1px solid #e1e4e8;
+  border-radius: 0 0 4px 4px;
+  font-family: monospace;
+  font-size: 12px;
+  overflow-x: auto;
+  white-space: pre-wrap;
+}
+
+.commandSuggestions {
+  padding: 15px;
+  border-top: 1px solid #e1e4e8;
+}
+
+.commandSuggestions h3 {
+  margin-top: 0;
+  margin-bottom: 10px;
+  font-size: 16px;
+  color: #24292e;
+}
+
+.suggestedCommands {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.commandExample {
+  display: flex;
+  align-items: center;
+  padding: 8px 12px;
+  background-color: #fff;
+  border: 1px solid #e1e4e8;
+  border-radius: 4px;
+  cursor: pointer;
+  transition: all 0.2s;
+}
+
+.commandExample:hover {
+  background-color: #f6f8fa;
+  border-color: #0366d6;
+}
+
+.commandExample code {
+  font-family: monospace;
+  background-color: #f6f8fa;
+  padding: 2px 6px;
+  border-radius: 3px;
+  margin-right: 10px;
+}
+
+.commandDescription {
+  flex-grow: 1;
+  font-size: 14px;
+  color: #586069;
+}
+
+.runButton {
+  padding: 4px 8px;
+  background-color: #2ea44f;
+  color: white;
+  border-radius: 4px;
+  font-size: 12px;
+  font-weight: 500;
+}
+
+.emptyState {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding: 40px 20px;
+  text-align: center;
+}
+
+.emptyState p {
+  margin-bottom: 20px;
+  font-size: 16px;
+  color: #586069;
+}
+
+.commandSuggestion {
+  width: 100%;
+  max-width: 500px;
+}
+
+@media (max-width: 768px) {
+  .visualizerContainer {
+    flex-direction: column;
+    height: auto;
+  }
+  
+  .repoStateContainer {
+    border-left: none;
+    border-top: 1px solid #e1e4e8;
+  }
+  
+  .toolbar {
+    flex-direction: column;
+    gap: 10px;
+  }
+  
+  .viewModes {
+    width: 100%;
+    justify-content: space-between;
+  }
+}
