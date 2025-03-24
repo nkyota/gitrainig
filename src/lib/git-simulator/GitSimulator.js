@@ -10,6 +10,7 @@ export function GitSimulatorProvider({ children }) {
     commits: [],
     branches: [{ name: 'main', commitId: null }],
     head: null,
+    currentBranch: 'main', // 現在のブランチ名を追加
     workingDirectory: {},
     stagingArea: {}
   };
@@ -230,14 +231,22 @@ function gitCommit(args, result) {
   repo.head = newCommit.id;
   
   // 現在のブランチの更新
-  const currentBranch = repo.branches.find(branch => branch.commitId === currentCommit.id);
-  
-  if (currentBranch) {
-    currentBranch.commitId = newCommit.id;
+  if (repo.currentBranch) {
+    // currentBranchプロパティを使用して現在のブランチを特定
+    const branchToUpdate = repo.branches.find(branch => branch.name === repo.currentBranch);
+    if (branchToUpdate) {
+      branchToUpdate.commitId = newCommit.id;
+    }
+  } else {
+    // 後方互換性のために残す（現在のコミットを指す最初のブランチを更新）
+    const currentBranch = repo.branches.find(branch => branch.commitId === currentCommit.id);
+    if (currentBranch) {
+      currentBranch.commitId = newCommit.id;
+    }
   }
   
   result.success = true;
-  result.message = `[${currentBranch?.name || 'detached HEAD'} ${newCommit.id.substring(0, 7)}] ${message}`;
+  result.message = `[${repo.currentBranch || 'detached HEAD'} ${newCommit.id.substring(0, 7)}] ${message}`;
   result.repository = repo;
   
   return result;
@@ -298,54 +307,37 @@ function gitCheckout(args, result) {
     return result;
   }
   
-  // 引数がない場合
   if (args.length === 0) {
-    result.message = 'error: you must specify a branch name or commit id';
+    result.message = 'error: you must specify a branch name or commit id\n\nusage: git checkout <branch|commit>';
     return result;
   }
   
   const target = args[0];
   
-  // ブランチへのチェックアウト
-  const targetBranch = repo.branches.find(branch => branch.name === target);
-  if (targetBranch) {
-    repo.head = targetBranch.commitId;
+  // ブランチの検索
+  const branch = repo.branches.find(b => b.name === target);
+  
+  if (branch) {
+    // ブランチに切り替え
+    repo.head = branch.commitId;
+    repo.currentBranch = branch.name; // 現在のブランチを更新
     
     result.success = true;
-    result.message = `Switched to branch '${target}'`;
+    result.message = `Switched to branch '${branch.name}'`;
     result.repository = repo;
     return result;
   }
   
-  // コミットIDへのチェックアウト
-  const targetCommit = repo.commits.find(commit => commit.id.startsWith(target));
-  if (targetCommit) {
-    repo.head = targetCommit.id;
-    
-    result.success = true;
-    result.message = `Note: checking out '${target}'.\n\nYou are in 'detached HEAD' state.`;
-    result.repository = repo;
-    return result;
-  }
+  // コミットIDの検索
+  const commit = repo.commits.find(c => c.id === target || c.id.startsWith(target));
   
-  // 新しいブランチの作成とチェックアウト
-  if (args.length > 1 && args[0] === '-b') {
-    const newBranchName = args[1];
-    
-    // 既存のブランチ名との重複チェック
-    if (repo.branches.some(branch => branch.name === newBranchName)) {
-      result.message = `fatal: A branch named '${newBranchName}' already exists.`;
-      return result;
-    }
-    
-    // 新しいブランチの追加
-    repo.branches.push({
-      name: newBranchName,
-      commitId: repo.head
-    });
+  if (commit) {
+    // detached HEADに切り替え
+    repo.head = commit.id;
+    repo.currentBranch = null; // detached HEADの場合はcurrentBranchをnullに設定
     
     result.success = true;
-    result.message = `Switched to a new branch '${newBranchName}'`;
+    result.message = `Note: checking out '${commit.id.substring(0, 7)}'.\n\nYou are in 'detached HEAD' state.`;
     result.repository = repo;
     return result;
   }
