@@ -4,6 +4,8 @@ import Head from 'next/head';
 
 export default function ChallengesPage() {
   const [currentChallenge, setCurrentChallenge] = useState(0);
+  const [activeChallenge, setActiveChallenge] = useState(null);
+  const [challengeProgress, setChallengeProgress] = useState({});
   
   // チャレンジのリスト
   const challenges = [
@@ -44,6 +46,98 @@ export default function ChallengesPage() {
     }
   ];
 
+  const startChallenge = (index) => {
+    setActiveChallenge(index);
+    // まだ進捗情報がない場合は初期化
+    if (!challengeProgress[index]) {
+      setChallengeProgress({
+        ...challengeProgress,
+        [index]: {
+          started: true,
+          completedTasks: [],
+          timeStarted: new Date().toISOString()
+        }
+      });
+    }
+  };
+
+  const completeTask = (challengeIndex, taskIndex) => {
+    const progress = { ...challengeProgress };
+    if (!progress[challengeIndex]) {
+      progress[challengeIndex] = {
+        started: true,
+        completedTasks: [],
+        timeStarted: new Date().toISOString()
+      };
+    }
+    
+    // タスクが既に完了していれば削除、そうでなければ追加
+    const taskAlreadyCompleted = progress[challengeIndex].completedTasks.includes(taskIndex);
+    
+    if (taskAlreadyCompleted) {
+      progress[challengeIndex].completedTasks = progress[challengeIndex].completedTasks.filter(
+        t => t !== taskIndex
+      );
+    } else {
+      progress[challengeIndex].completedTasks.push(taskIndex);
+    }
+    
+    setChallengeProgress(progress);
+  };
+
+  const renderActiveChallenge = () => {
+    if (activeChallenge === null) return null;
+    
+    const challenge = challenges[activeChallenge];
+    const progress = challengeProgress[activeChallenge] || { completedTasks: [] };
+    
+    return (
+      <div className={styles.activeChallenge}>
+        <div className={styles.challengeHeader}>
+          <h2>{challenge.title}</h2>
+          <span className={styles.difficulty}>{challenge.difficulty}</span>
+        </div>
+        
+        <p className={styles.description}>{challenge.description}</p>
+        
+        <div className={styles.tasks}>
+          <h3>タスク</h3>
+          <ul>
+            {challenge.tasks.map((task, taskIndex) => (
+              <li 
+                key={taskIndex}
+                className={progress.completedTasks.includes(taskIndex) ? styles.completed : ''}
+                onClick={() => completeTask(activeChallenge, taskIndex)}
+              >
+                <input 
+                  type="checkbox" 
+                  checked={progress.completedTasks.includes(taskIndex)}
+                  onChange={() => {}}
+                />
+                {task}
+              </li>
+            ))}
+          </ul>
+        </div>
+        
+        <div className={styles.challengeActions}>
+          <button 
+            className={styles.backButton}
+            onClick={() => setActiveChallenge(null)}
+          >
+            チャレンジ一覧に戻る
+          </button>
+          
+          {progress.completedTasks.length === challenge.tasks.length && (
+            <div className={styles.successMessage}>
+              おめでとうございます！すべてのタスクを完了しました！
+            </div>
+          )}
+        </div>
+      </div>
+    );
+  };
+
   return (
     <div className={styles.container}>
       <Head>
@@ -58,32 +152,48 @@ export default function ChallengesPage() {
           実践的な課題に挑戦して、Gitスキルを磨きましょう。
         </p>
         
-        <div className={styles.challenges}>
-          {challenges.map((challenge, index) => (
-            <div 
-              key={challenge.id}
-              className={`${styles.challenge} ${currentChallenge === index ? styles.active : ''}`}
-              onClick={() => setCurrentChallenge(index)}
-            >
-              <h2>{challenge.title} <span className={styles.difficulty}>{challenge.difficulty}</span></h2>
-              <p>{challenge.description}</p>
-              
-              {currentChallenge === index && (
-                <div className={styles.challengeDetails}>
-                  <h3>タスク</h3>
-                  <ul>
-                    {challenge.tasks.map((task, taskIndex) => (
-                      <li key={taskIndex}>{task}</li>
-                    ))}
-                  </ul>
-                  <button className={styles.startButton}>
-                    チャレンジを開始
-                  </button>
-                </div>
-              )}
-            </div>
-          ))}
-        </div>
+        {activeChallenge === null ? (
+          <div className={styles.challenges}>
+            {challenges.map((challenge, index) => (
+              <div 
+                key={challenge.id}
+                className={`${styles.challenge} ${currentChallenge === index ? styles.active : ''}`}
+                onClick={() => setCurrentChallenge(index)}
+              >
+                <h2>
+                  {challenge.title} 
+                  <span className={styles.difficulty}>{challenge.difficulty}</span>
+                  {challengeProgress[index]?.completedTasks?.length === challenge.tasks.length && (
+                    <span className={styles.completed}>完了!</span>
+                  )}
+                </h2>
+                <p>{challenge.description}</p>
+                
+                {currentChallenge === index && (
+                  <div className={styles.challengeDetails}>
+                    <h3>タスク</h3>
+                    <ul>
+                      {challenge.tasks.map((task, taskIndex) => (
+                        <li key={taskIndex}>{task}</li>
+                      ))}
+                    </ul>
+                    <button 
+                      className={styles.startButton}
+                      onClick={(e) => {
+                        e.stopPropagation();
+                        startChallenge(index);
+                      }}
+                    >
+                      チャレンジを開始
+                    </button>
+                  </div>
+                )}
+              </div>
+            ))}
+          </div>
+        ) : (
+          renderActiveChallenge()
+        )}
       </main>
 
       <footer className={styles.footer}>
