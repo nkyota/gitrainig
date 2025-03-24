@@ -230,9 +230,7 @@ function gitCommit(args, result) {
   repo.head = newCommit.id;
   
   // 現在のブランチの更新
-  const currentBranch = repo.branches.find(branch => 
-    repo.commits.find(commit => commit.id === branch.commitId)?.id === currentCommit.id
-  );
+  const currentBranch = repo.branches.find(branch => branch.commitId === currentCommit.id);
   
   if (currentBranch) {
     currentBranch.commitId = newCommit.id;
