@@ -18,23 +18,8 @@ export default function Footer() {
             <h3 className={styles.title}>リンク</h3>
             <ul className={styles.links}>
               <li>
-                <Link href="/learn" className={styles.link}>
-                  学習を始める
-                </Link>
-              </li>
-              <li>
-                <Link href="/learn/simulator" className={styles.link}>
+                <Link href="/" className={styles.link}>
                   Gitシミュレーター
-                </Link>
-              </li>
-              <li>
-                <Link href="/learn/challenges" className={styles.link}>
-                  チャレンジ
-                </Link>
-              </li>
-              <li>
-                <Link href="/about" className={styles.link}>
-                  Gitについて
                 </Link>
               </li>
             </ul>

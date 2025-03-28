@@ -27,23 +27,8 @@ export default function Navbar() {
         <div className={`${styles.menu} ${isMenuOpen ? styles.active : ''}`}>
           <ul className={styles.navList}>
             <li className={styles.navItem}>
-              <Link href="/learn" className={styles.navLink}>
-                学習を始める
-              </Link>
-            </li>
-            <li className={styles.navItem}>
-              <Link href="/learn/simulator" className={styles.navLink}>
+              <Link href="/" className={styles.navLink}>
                 Gitシミュレーター
-              </Link>
-            </li>
-            <li className={styles.navItem}>
-              <Link href="/learn/challenges" className={styles.navLink}>
-                チャレンジ
-              </Link>
-            </li>
-            <li className={styles.navItem}>
-              <Link href="/about" className={styles.navLink}>
-                Gitについて
               </Link>
             </li>
           </ul>
