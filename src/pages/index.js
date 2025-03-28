@@ -9,8 +9,21 @@ export default function Home() {
   const { repository, commandHistory, executeCommand, resetRepository } = useGitSimulator();
   const [showInstructions, setShowInstructions] = useState(true);
 
+  // コマンド履歴を管理するための状態
+  const [terminalHistory, setTerminalHistory] = useState(commandHistory);
+
   const handleCommandExecute = (command) => {
+    // コマンド入力を履歴に追加
+    setTerminalHistory(prev => [...prev, { type: 'input', content: command }]);
+    
+    // コマンドを実行
     const result = executeCommand(command);
+    
+    // 結果を履歴に追加
+    if (result) {
+      setTerminalHistory(prev => [...prev, { type: 'output', content: result }]);
+    }
+    
     return result;
   };
 
@@ -65,7 +78,7 @@ export default function Home() {
           <div className={styles.terminalContainer}>
             <InteractiveCommandTerminal 
               onCommandExecute={handleCommandExecute}
-              commandHistory={commandHistory}
+              commandHistory={terminalHistory}
             />
             
             <div className={styles.actions}>
