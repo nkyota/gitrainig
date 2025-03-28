@@ -1,33 +1,30 @@
-# Git Basics 拡張実装計画
+# Gitトレーニングアプリケーション修正タスク
 
-## 実装済み機能
-- [x] 視覚的理解の強化
-  - [x] EnhancedGitVisualizerコンポーネントの統合
-  - [x] リポジトリ状態の視覚的表現の改善
-  - [x] コミット履歴のグラフ表示
-- [x] インタラクティブな学習要素
-  - [x] InteractiveCommandTerminalの実装
-  - [x] GitLearningModuleの統合
-  - [x] SampleLessonsの追加
-- [x] ユーザーインターフェースの改善
-  - [x] LessonSelectorコンポーネントの統合
-  - [x] レッスン選択画面の改善
-  - [x] 学習進捗の視覚化
-- [x] ゲーミフィケーション要素
-  - [x] AchievementSystemの実装
-  - [x] ポイントシステムの導入
-  - [x] 実績獲得機能の追加
+## 修正項目
+- [x] ①learn/simulatorページのネットワーク表示とタイムライン表示の修正
+- [x] ②learn/simulatorページの「次に試せるコマンド」の実行ボタン機能修正
+- [x] ③learn/simulatorページの差分ファイル表示の改善
+- [x] ④learn/simulatorページから実績機能の削除
+- [x] ⑤Gitシミュレーターをトップページに移動（学習をはじめる、チャレンジ、Gitについての項目は削除）
 
-## 今後の改善計画
-- [ ] コンテンツの充実
-  - [ ] Git用語集の作成
-  - [ ] トラブルシューティングガイドの追加
-  - [ ] 実践的なシナリオベースのレッスンの追加
-- [ ] インタラクティブ機能の強化
-  - [ ] より複雑なGitシナリオのシミュレーション
-  - [ ] マージコンフリクト解消の練習機能
-  - [ ] リアルタイムフィードバックの改善
-- [ ] ユーザーデータの管理
-  - [ ] 学習進捗の保存機能の強化
-  - [ ] ユーザープロファイル機能
-  - [ ] 学習分析ダッシュボード
+## 詳細タスク
+### ①ネットワーク表示とタイムライン表示の修正
+- [x] EnhancedGitVisualizer.module.cssにネットワーク表示のスタイルを実装
+- [x] EnhancedGitVisualizer.module.cssにタイムライン表示のスタイルを実装
+- [x] EnhancedGitVisualizer.jsのviewMode切り替え機能を確認・修正
+
+### ②「次に試せるコマンド」の実行ボタン機能修正
+- [x] simulator.jsからEnhancedGitVisualizerへのonCommandExecute関数の受け渡しを修正
+- [x] EnhancedGitVisualizer.jsの実行ボタンクリックイベントを修正
+
+### ③差分ファイル表示の改善
+- [x] コミット詳細表示の差分表示部分を改善
+- [x] 差分ファイルの視覚的表示を強化
+
+### ④実績機能の削除
+- [x] simulator.jsから実績関連のコードを削除
+- [x] AchievementSystemコンポーネントの参照を削除
+
+### ⑤Gitシミュレーターをトップページに移動
+- [x] index.jsを修正してGitシミュレーターを表示
+- [x] 不要な項目（学習をはじめる、チャレンジ、Gitについて）を削除

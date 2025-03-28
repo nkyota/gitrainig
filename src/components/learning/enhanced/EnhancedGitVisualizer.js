@@ -208,9 +208,24 @@ export default function EnhancedGitVisualizer({ repository, onCommandExecute }) 
               {selectedCommit.changes ? (
                 Object.keys(selectedCommit.changes).map(file => (
                   <div key={file} className={styles.fileDiff}>
-                    <div className={styles.fileDiffHeader}>{file}</div>
+                    <div className={styles.fileDiffHeader}>
+                      <span className={styles.fileName}>{file}</span>
+                      <span className={styles.fileStatus}>変更されたファイル</span>
+                    </div>
                     <pre className={styles.diffContent}>
-                      {selectedCommit.changes[file]}
+                      {selectedCommit.changes[file].split('\n').map((line, index) => {
+                        let lineClass = '';
+                        if (line.startsWith('+')) lineClass = styles.addedLine;
+                        if (line.startsWith('-')) lineClass = styles.deletedLine;
+                        if (line.startsWith('@')) lineClass = styles.infoLine;
+                        
+                        return (
+                          <div key={index} className={`${styles.diffLine} ${lineClass}`}>
+                            <span className={styles.lineNumber}>{index + 1}</span>
+                            <span className={styles.lineContent}>{line}</span>
+                          </div>
+                        );
+                      })}
                     </pre>
                   </div>
                 ))

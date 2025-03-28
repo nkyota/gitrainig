@@ -90,11 +90,70 @@
 }
 
 .visualizer.network {
-  /* ネットワーク表示のスタイル */
+  display: flex;
+  flex-direction: column;
+}
+
+.visualizer.network .commitGraph {
+  display: flex;
+  flex-direction: column;
+  position: relative;
+}
+
+.visualizer.network .commit {
+  position: relative;
+  left: auto;
+  margin-bottom: 20px;
+  width: 100%;
+  border: 1px solid #e1e4e8;
+  border-radius: 6px;
+  padding: 10px;
+  background-color: #fff;
+}
+
+.visualizer.network .commitLine {
+  position: absolute;
+  height: 20px;
+  width: 2px;
+  left: 8px;
+  bottom: -20px;
 }
 
 .visualizer.timeline {
-  /* タイムライン表示のスタイル */
+  display: flex;
+  flex-direction: row;
+  overflow-x: auto;
+  padding: 20px 10px;
+}
+
+.visualizer.timeline .commitGraph {
+  display: flex;
+  flex-direction: row;
+  min-height: auto;
+  min-width: 100%;
+  padding-left: 0;
+}
+
+.visualizer.timeline .commit {
+  position: relative;
+  left: auto;
+  top: auto !important;
+  margin-right: 20px;
+  min-width: 200px;
+  border: 1px solid #e1e4e8;
+  border-radius: 6px;
+  padding: 10px;
+  background-color: #fff;
+  height: fit-content;
+}
+
+.visualizer.timeline .commitLine {
+  position: absolute;
+  width: 20px;
+  height: 2px;
+  left: auto;
+  top: 50%;
+  right: -20px;
 }
 
 .commitGraph {
@@ -328,7 +387,7 @@
 
 .diffContent {
   margin: 0;
-  padding: 10px;
+  padding: 0;
   background-color: #f6f8fa;
   border: 1px solid #e1e4e8;
   border-radius: 0 0 4px 4px;
@@ -336,6 +395,77 @@
   font-size: 12px;
   overflow-x: auto;
   white-space: pre-wrap;
+}
+
+.diffLine {
+  display: flex;
+  padding: 0;
+  line-height: 1.5;
+}
+
+.lineNumber {
+  display: inline-block;
+  width: 40px;
+  text-align: right;
+  padding-right: 10px;
+  color: #586069;
+  background-color: #f1f2f3;
+  user-select: none;
+  border-right: 1px solid #e1e4e8;
+}
+
+.lineContent {
+  padding-left: 10px;
+  white-space: pre;
+}
+
+.addedLine {
+  background-color: #e6ffed;
+}
+
+.addedLine .lineContent {
+  color: #22863a;
+}
+
+.deletedLine {
+  background-color: #ffeef0;
+}
+
+.deletedLine .lineContent {
+  color: #cb2431;
+}
+
+.infoLine {
+  background-color: #f1f8ff;
+}
+
+.infoLine .lineContent {
+  color: #0366d6;
+}
+
+.fileDiffHeader {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 5px 10px;
+  background-color: #f1f2f3;
+  border: 1px solid #e1e4e8;
+  border-bottom: none;
+  border-radius: 4px 4px 0 0;
+}
+
+.fileName {
+  font-family: monospace;
+  font-size: 14px;
+  font-weight: bold;
+}
+
+.fileStatus {
+  padding: 2px 6px;
+  border-radius: 12px;
+  font-size: 12px;
+  background-color: #0366d6;
+  color: white;
 }
 
 .commandSuggestions {
